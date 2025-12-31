@@ -1,19 +1,19 @@
--- EspPremium.lua - ESP Tab Content (Rayfield)
+-- EspPremium.lua - ESP Tab Content (Rayfield - Correct Syntax)
 
 local Tab = _G.AFSE_Tabs.ESP
 
 Tab:CreateParagraph({
    Title = "👁️ Premium ESP",
-   Content = "Customizable highlights for Chikara shards and more."
+   Content = "Customizable highlights for Chikara shards."
 })
 
 -- Chikara ESP Variables
-local CurrentChikaraFill = Color3.fromRGB(0, 255, 255)  -- Default cyan fill
-local CurrentChikaraOutline = Color3.fromRGB(255, 255, 255)  -- Default white outline
+local CurrentChikaraFill = Color3.fromRGB(0, 255, 255)  -- Default cyan
+local CurrentChikaraOutline = Color3.fromRGB(255, 255, 255)  -- Default white
 local chikaraHighlights = {}
 local chikaraConnection = nil
 
--- Update all existing highlights when color changes
+-- Update highlights when color changes
 local function updateChikaraHighlights()
     for _, highlight in pairs(chikaraHighlights) do
         if highlight and highlight.Parent then
@@ -25,9 +25,9 @@ end
 
 -- Chikara Fill Color Picker
 Tab:CreateColorPicker({
-    Name = "Chikara Fill Color",
-    Info = "Choose the fill color for Chikara shard highlights",
-    CurrentColor = CurrentChikaraFill,
+    Title = "Chikara Fill Color",
+    Description = "Choose the fill color for Chikara shard highlights",
+    Default = CurrentChikaraFill,
     Flag = "ChikaraFillColor",
     Callback = function(color)
         CurrentChikaraFill = color
@@ -37,9 +37,9 @@ Tab:CreateColorPicker({
 
 -- Chikara Outline Color Picker
 Tab:CreateColorPicker({
-    Name = "Chikara Outline Color",
-    Info = "Choose the outline color for Chikara shard highlights",
-    CurrentColor = CurrentChikaraOutline,
+    Title = "Chikara Outline Color",
+    Description = "Choose the outline color for Chikara shard highlights",
+    Default = CurrentChikaraOutline,
     Flag = "ChikaraOutlineColor",
     Callback = function(color)
         CurrentChikaraOutline = color
@@ -49,9 +49,9 @@ Tab:CreateColorPicker({
 
 -- Chikara Shards ESP Toggle
 Tab:CreateToggle({
-    Name = "Chikara Shards",
-    Info = "Highlights all Chikara shards in the map",
-    CurrentValue = false,
+    Title = "Chikara Shards",
+    Description = "Highlights all Chikara shards in the map",
+    Default = false,
     Flag = "ChikaraShardsESP",
     Callback = function(state)
         local folder = workspace.Scriptable.ChikaraBoxes
@@ -73,14 +73,13 @@ Tab:CreateToggle({
         end
 
         if state then
-            -- Enable ESP: highlight existing shards
+            -- Enable: highlight existing + listen for new
             for _, obj in ipairs(folder:GetChildren()) do
                 addHighlight(obj)
             end
-            -- Listen for new shards spawning
             chikaraConnection = folder.ChildAdded:Connect(addHighlight)
         else
-            -- Disable ESP: remove all highlights
+            -- Disable: clean up
             for _, highlight in pairs(chikaraHighlights) do
                 if highlight then
                     highlight:Destroy()
@@ -95,4 +94,4 @@ Tab:CreateToggle({
     end
 })
 
-print("EspPremium.lua loaded successfully! (Chikara ESP ready)")
+print("EspPremium.lua loaded successfully! (Chikara ESP with correct Rayfield syntax)")
