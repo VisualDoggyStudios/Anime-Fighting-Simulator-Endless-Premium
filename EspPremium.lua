@@ -1,4 +1,4 @@
--- EspPremium.lua - ESP Tab Content
+-- EspPremium.lua - ESP Tab Content (Rayfield)
 
 local Tab = _G.AFSE_Tabs.ESP
 
@@ -7,159 +7,170 @@ Tab:CreateParagraph({
    Content = "Customizable highlights with smooth real-time updates."
 })
 
-local CurrentChikaraFill = Color3.fromRGB(0, 255, 255)
+-- === Chikara Boxes ESP ===
+local CurrentChikaraFill = Color3.fromRGB(255, 0, 0)
 local CurrentChikaraOutline = Color3.fromRGB(255, 255, 255)
 local chikaraHighlights = {}
 local chikaraConnection = nil
 
 local function updateChikaraHighlights()
-   for _, h in pairs(chikaraHighlights) do 
-      if h and h.Parent then 
-         h.FillColor = CurrentChikaraFill 
-         h.OutlineColor = CurrentChikaraOutline 
-      end 
-   end
+    for _, h in pairs(chikaraHighlights) do 
+        if h and h.Parent then 
+            h.FillColor = CurrentChikaraFill 
+            h.OutlineColor = CurrentChikaraOutline 
+        end 
+    end
 end
 
 Tab:CreateColorPicker({
-   Name = "Chikara Fill Color",
-   Info = "Fill color for Chikara crate highlights",
-   CurrentColor = CurrentChikaraFill,
-   Flag = "ChikaraFillColor",
-   Callback = function(c) 
-      CurrentChikaraFill = c 
-      updateChikaraHighlights() 
-   end
+    Name = "Chikara Fill Color",
+    Info = "Fill color for Chikara crate highlights",
+    CurrentColor = CurrentChikaraFill,
+    Flag = "ChikaraFillColor",
+    Callback = function(c)
+        CurrentChikaraFill = c
+        updateChikaraHighlights()
+    end
 })
 
 Tab:CreateColorPicker({
-   Name = "Chikara Outline Color",
-   Info = "Outline color for Chikara crate highlights",
-   CurrentColor = CurrentChikaraOutline,
-   Flag = "ChikaraOutlineColor",
-   Callback = function(c) 
-      CurrentChikaraOutline = c 
-      updateChikaraHighlights() 
-   end
+    Name = "Chikara Outline Color",
+    Info = "Outline color for Chikara crate highlights",
+    CurrentColor = CurrentChikaraOutline,
+    Flag = "ChikaraOutlineColor",
+    Callback = function(c)
+        CurrentChikaraOutline = c
+        updateChikaraHighlights()
+    end
 })
 
 Tab:CreateToggle({
-   Name = "Chikara Box ESP",
-   Info = "Highlights all Chikara crates",
-   CurrentValue = false,
-   Flag = "ChikaraBoxesESP",
-   Callback = function(state)
-      local folder = workspace.Scriptable.ChikaraBoxes
-      local function addHighlight(obj)
-         if not chikaraHighlights[obj] then
-            local h = Instance.new("Highlight")
-            h.FillColor = CurrentChikaraFill
-            h.OutlineColor = CurrentChikaraOutline
-            h.FillTransparency = 0.5
-            h.OutlineTransparency = 0
-            h.Parent = obj
-            chikaraHighlights[obj] = h
-            obj.Destroying:Connect(function() chikaraHighlights[obj] = nil end)
-         end
-      end
-      if state then
-         for _, obj in ipairs(folder:GetChildren()) do addHighlight(obj) end
-         chikaraConnection = folder.ChildAdded:Connect(addHighlight)
-      else
-         for _, h in pairs(chikaraHighlights) do if h then h:Destroy() end end
-         chikaraHighlights = {}
-         if chikaraConnection then chikaraConnection:Disconnect() chikaraConnection = nil end
-      end
-   end
+    Name = "Chikara Boxes",
+    Info = "Highlights all Chikara crates",
+    CurrentValue = false,
+    Flag = "ChikaraBoxes",
+    Callback = function(state)
+        local folder = workspace.Scriptable.ChikaraBoxes
+        local function addHighlight(obj)
+            if not chikaraHighlights[obj] then
+                local h = Instance.new("Highlight")
+                h.FillColor = CurrentChikaraFill
+                h.OutlineColor = CurrentChikaraOutline
+                h.FillTransparency = 0.5
+                h.OutlineTransparency = 0
+                h.Parent = obj
+                chikaraHighlights[obj] = h
+                obj.Destroying:Connect(function() chikaraHighlights[obj] = nil end)
+            end
+        end
+
+        if state then
+            for _, obj in ipairs(folder:GetChildren()) do addHighlight(obj) end
+            chikaraConnection = folder.ChildAdded:Connect(addHighlight)
+        else
+            for _, h in pairs(chikaraHighlights) do if h then h:Destroy() end end
+            chikaraHighlights = {}
+            if chikaraConnection then chikaraConnection:Disconnect() chikaraConnection = nil end
+        end
+    end
 })
 
-local CurrentMobFill = Color3.fromRGB(255, 100, 255)
+-- === Mob ESP ===
+local CurrentMobFill = Color3.fromRGB(255, 0, 255)
 local CurrentMobOutline = Color3.fromRGB(255, 255, 255)
 local mobHighlights = {}
 local mobConnection = nil
 
 local function updateMobHighlights()
-   for _, h in pairs(mobHighlights) do
-      if h and h.Parent then
-         h.FillColor = CurrentMobFill
-         h.OutlineColor = CurrentMobOutline
-      end
-   end
+    for _, h in pairs(mobHighlights) do
+        if h and h.Parent then
+            h.FillColor = CurrentMobFill
+            h.OutlineColor = CurrentMobOutline
+        end
+    end
 end
 
 local function clearAllMobHighlights()
-   if mobConnection then mobConnection:Disconnect() mobConnection = nil end
-   for _, h in pairs(mobHighlights) do if h then h:Destroy() end end
-   mobHighlights = {}
+    if mobConnection then mobConnection:Disconnect() mobConnection = nil end
+    for _, h in pairs(mobHighlights) do if h then h:Destroy() end end
+    mobHighlights = {}
 end
 
-local function addHighlight(obj)
-   if not mobHighlights[obj] then
-      local h = Instance.new("Highlight")
-      h.Name = "MobESP"
-      h.FillColor = CurrentMobFill
-      h.OutlineColor = CurrentMobOutline
-      h.FillTransparency = 0.4
-      h.OutlineTransparency = 0
-      h.Parent = obj
-      mobHighlights[obj] = h
-      obj.Destroying:Connect(function() mobHighlights[obj] = nil end)
-   end
+local function addMobHighlight(obj)
+    if not mobHighlights[obj] then
+        local h = Instance.new("Highlight")
+        h.Name = "MobESP"
+        h.FillColor = CurrentMobFill
+        h.OutlineColor = CurrentMobOutline
+        h.FillTransparency = 0.4
+        h.OutlineTransparency = 0
+        h.Parent = obj
+        mobHighlights[obj] = h
+        obj.Destroying:Connect(function() mobHighlights[obj] = nil end)
+    end
 end
 
 local function applyMobESP(mobType)
-   clearAllMobHighlights()
-   if mobType == "None" then return end
-   local mobFolder = workspace.Scriptable.Mobs
-   local function shouldHighlight(obj)
-      if mobType == "Sarka" then return obj.Name == "1"
-      elseif mobType == "Gen" then return obj.Name == "2"
-      elseif mobType == "Igicho" then return obj.Name == "3"
-      elseif mobType == "Booh" then return obj.Name == "5"
-      elseif mobType == "Saytamu" then return obj.Name == "6"
-      elseif mobType == "Remgonuk" then return obj.Name == "7"
-      end
-      return false
-   end
-   for _, obj in ipairs(mobFolder:GetChildren()) do
-      if shouldHighlight(obj) then addHighlight(obj) end
-   end
-   mobConnection = mobFolder.ChildAdded:Connect(function(child)
-      if shouldHighlight(child) then addHighlight(child) end
-   end)
+    clearAllMobHighlights()
+    if mobType == "None" then return end
+
+    local mobFolder = workspace.Scriptable.Mobs
+    local mobMap = {
+        Sarka = "1",
+        Gen = "2",
+        Igicho = "3",
+        Booh = "5",
+        Saytamu = "6",
+        Remgonuk = "7"
+    }
+
+    local targetName = mobMap[mobType]
+    if not targetName then return end
+
+    for _, obj in ipairs(mobFolder:GetChildren()) do
+        if obj.Name == targetName then
+            addMobHighlight(obj)
+        end
+    end
+
+    mobConnection = mobFolder.ChildAdded:Connect(function(child)
+        if child.Name == targetName then
+            addMobHighlight(child)
+        end
+    end)
 end
 
 Tab:CreateColorPicker({
-   Name = "Mob Fill Color",
-   Info = "Fill color for mob highlights",
-   CurrentColor = CurrentMobFill,
-   Flag = "MobFillColor",
-   Callback = function(c) 
-      CurrentMobFill = c 
-      updateMobHighlights() 
-   end
+    Name = "Mob Fill Color",
+    Info = "Fill color for mob highlights",
+    CurrentColor = CurrentMobFill,
+    Flag = "MobFillColor",
+    Callback = function(c)
+        CurrentMobFill = c
+        updateMobHighlights()
+    end
 })
 
 Tab:CreateColorPicker({
-   Name = "Mob Outline Color",
-   Info = "Outline color for mob highlights",
-   CurrentColor = CurrentMobOutline,
-   Flag = "MobOutlineColor",
-   Callback = function(c) 
-      CurrentMobOutline = c 
-      updateMobHighlights() 
-   end
+    Name = "Mob Outline Color",
+    Info = "Outline color for mob highlights",
+    CurrentColor = CurrentMobOutline,
+    Flag = "MobOutlineColor",
+    Callback = function(c)
+        CurrentMobOutline = c
+        updateMobHighlights()
+    end
 })
 
 Tab:CreateDropdown({
-   Name = "Mob ESP Selector",
-   Info = "Choose which mob type to highlight",
-   Options = {"None", "Sarka", "Gen", "Igicho", "Booh", "Remgonuk", "Saytamu"},
-   CurrentOption = {"None"},
-   Flag = "MobESPSelector",
-   Callback = function(value)
-      applyMobESP(value[1])
-   end
+    Name = "Mob ESP",
+    Info = "Choose which mob type to highlight",
+    Options = {"None", "Sarka", "Gen", "Igicho", "Booh", "Remgonuk", "Saytamu"},
+    CurrentOption = {"None"},
+    Flag = "MobESPSelector",
+    Callback = function(value)
+        applyMobESP(value[1])
+    end
 })
 
 print("EspPremium.lua loaded successfully!")
