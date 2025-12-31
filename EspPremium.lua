@@ -1,13 +1,12 @@
--- ESP.lua - Standalone ESP Tab for AFSE Premium (Rayfield)
+-- EspPremium.lua - ESP Tab Content
 
-local ESPTab = Window:CreateTab("ESP", 4483362458)
+local Tab = _G.AFSE_Tabs.ESP
 
-ESPTab:CreateParagraph({
+Tab:CreateParagraph({
    Title = "👁️ Premium ESP",
    Content = "Customizable highlights with smooth real-time updates."
 })
 
--- Chikara ESP Variables
 local CurrentChikaraFill = Color3.fromRGB(0, 255, 255)
 local CurrentChikaraOutline = Color3.fromRGB(255, 255, 255)
 local chikaraHighlights = {}
@@ -22,8 +21,7 @@ local function updateChikaraHighlights()
    end
 end
 
--- Chikara Color Pickers
-ESPTab:CreateColorPicker({
+Tab:CreateColorPicker({
    Name = "Chikara Fill Color",
    Info = "Fill color for Chikara crate highlights",
    CurrentColor = CurrentChikaraFill,
@@ -34,7 +32,7 @@ ESPTab:CreateColorPicker({
    end
 })
 
-ESPTab:CreateColorPicker({
+Tab:CreateColorPicker({
    Name = "Chikara Outline Color",
    Info = "Outline color for Chikara crate highlights",
    CurrentColor = CurrentChikaraOutline,
@@ -45,8 +43,7 @@ ESPTab:CreateColorPicker({
    end
 })
 
--- Chikara Box ESP Toggle
-ESPTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Chikara Box ESP",
    Info = "Highlights all Chikara crates",
    CurrentValue = false,
@@ -76,7 +73,6 @@ ESPTab:CreateToggle({
    end
 })
 
--- Mob ESP Variables
 local CurrentMobFill = Color3.fromRGB(255, 100, 255)
 local CurrentMobOutline = Color3.fromRGB(255, 255, 255)
 local mobHighlights = {}
@@ -133,8 +129,7 @@ local function applyMobESP(mobType)
    end)
 end
 
--- Mob Color Pickers
-ESPTab:CreateColorPicker({
+Tab:CreateColorPicker({
    Name = "Mob Fill Color",
    Info = "Fill color for mob highlights",
    CurrentColor = CurrentMobFill,
@@ -145,7 +140,7 @@ ESPTab:CreateColorPicker({
    end
 })
 
-ESPTab:CreateColorPicker({
+Tab:CreateColorPicker({
    Name = "Mob Outline Color",
    Info = "Outline color for mob highlights",
    CurrentColor = CurrentMobOutline,
@@ -156,8 +151,7 @@ ESPTab:CreateColorPicker({
    end
 })
 
--- Mob ESP Selector Dropdown
-ESPTab:CreateDropdown({
+Tab:CreateDropdown({
    Name = "Mob ESP Selector",
    Info = "Choose which mob type to highlight",
    Options = {"None", "Sarka", "Gen", "Igicho", "Booh", "Remgonuk", "Saytamu"},
@@ -168,4 +162,4 @@ ESPTab:CreateDropdown({
    end
 })
 
-print("ESP.lua loaded successfully!")
+print("EspPremium.lua loaded successfully!")

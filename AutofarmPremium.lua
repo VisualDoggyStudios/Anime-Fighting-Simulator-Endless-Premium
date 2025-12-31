@@ -1,15 +1,14 @@
--- Autofarm.lua - Standalone Autofarm Tab for AFSE Premium (Rayfield)
+-- AutofarmPremium.lua - Autofarm Tab Content
 
-local AutofarmTab = Window:CreateTab("Autofarm", 4483362458)
+local Tab = _G.AFSE_Tabs.Autofarm
 
-AutofarmTab:CreateParagraph({
+Tab:CreateParagraph({
    Title = "⚡ Premium Autofarm",
    Content = "All training features with improved reliability."
 })
 
--- Auto Train Strength
 local TrainEnabled = false
-AutofarmTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Auto Train Strength",
    Info = "Rapid strength training",
    CurrentValue = false,
@@ -27,9 +26,8 @@ AutofarmTab:CreateToggle({
    end
 })
 
--- Auto Farm Durability
 local DurabilityEnabled = false
-AutofarmTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Auto Farm Durability",
    Info = "Fast durability gains",
    CurrentValue = false,
@@ -47,9 +45,8 @@ AutofarmTab:CreateToggle({
    end
 })
 
--- Auto Farm Chakra
 local ChakraEnabled = false
-AutofarmTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Auto Farm Chakra",
    Info = "Efficient chakra farming",
    CurrentValue = false,
@@ -67,9 +64,8 @@ AutofarmTab:CreateToggle({
    end
 })
 
--- Auto Farm Sword
 local SwordEnabled = false
-AutofarmTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Auto Farm Sword",
    Info = "Activates sword and trains skill",
    CurrentValue = false,
@@ -90,9 +86,8 @@ AutofarmTab:CreateToggle({
    end
 })
 
--- Auto Farm Speed & Agility
 local SpeedAgilityEnabled = false
-AutofarmTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Auto Farm Speed & Agility",
    Info = "Alternates between speed and agility",
    CurrentValue = false,
@@ -112,4 +107,4 @@ AutofarmTab:CreateToggle({
    end
 })
 
-print("Autofarm.lua loaded successfully!")
+print("AutofarmPremium.lua loaded successfully!")

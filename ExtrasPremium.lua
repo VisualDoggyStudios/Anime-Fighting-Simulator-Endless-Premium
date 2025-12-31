@@ -1,14 +1,13 @@
--- Extras.lua - Standalone Premium Extras Tab for AFSE Premium (Rayfield)
+-- ExtrasPremium.lua - Premium Extras Tab Content
 
-local ExtrasTab = Window:CreateTab("Premium Extras", 4483362458)
+local Tab = _G.AFSE_Tabs.Extras
 
-ExtrasTab:CreateParagraph({
+Tab:CreateParagraph({
    Title = "👑 Premium Extras",
    Content = "Advanced premium features available to all users."
 })
 
--- Get Wind Grimore Button
-ExtrasTab:CreateButton({
+Tab:CreateButton({
    Name = "Get Wind Grimore",
    Info = "Teleports to Wind Grimore spot (manual summon required)",
    Callback = function()
@@ -27,9 +26,8 @@ ExtrasTab:CreateButton({
    end
 })
 
--- Fast Wind Grimore Farms
 local SakraFarmFastEnabled = false
-ExtrasTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Sakra Farm (Fast)",
    Info = "Teleports to optimal Sarka spot + auto Wind Grimore loop",
    CurrentValue = false,
@@ -65,7 +63,7 @@ ExtrasTab:CreateToggle({
 })
 
 local GenFarmFastEnabled = false
-ExtrasTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Gen Farm (Fast)",
    Info = "Teleports to optimal Gen spot + auto Wind Grimore loop",
    CurrentValue = false,
@@ -101,7 +99,7 @@ ExtrasTab:CreateToggle({
 })
 
 local IgichoFarmFastEnabled = false
-ExtrasTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Igicho Farm (Fast)",
    Info = "Teleports to optimal Igicho spot + auto Wind Grimore loop",
    CurrentValue = false,
@@ -137,7 +135,7 @@ ExtrasTab:CreateToggle({
 })
 
 local BoohFarmFastEnabled = false
-ExtrasTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Booh Farm (Fast)",
    Info = "Teleports to optimal Booh spot + auto Wind Grimore loop",
    CurrentValue = false,
@@ -173,7 +171,7 @@ ExtrasTab:CreateToggle({
 })
 
 local RemgonukFarmFastEnabled = false
-ExtrasTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Remgonuk Farm (Fast)",
    Info = "Teleports to optimal Remgonuk spot + auto Wind Grimore loop",
    CurrentValue = false,
@@ -209,7 +207,7 @@ ExtrasTab:CreateToggle({
 })
 
 local SaytamuFarmFastEnabled = false
-ExtrasTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Saytamu Farm (Fast)",
    Info = "Teleports to optimal Saytamu spot + auto Wind Grimore loop",
    CurrentValue = false,
@@ -244,4 +242,4 @@ ExtrasTab:CreateToggle({
    end
 })
 
-print("Extras.lua loaded successfully!")
+print("ExtrasPremium.lua loaded successfully!")

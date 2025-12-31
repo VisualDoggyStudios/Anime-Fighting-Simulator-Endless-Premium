@@ -1,13 +1,12 @@
--- Mobs.lua - Standalone Mobs Tab for AFSE Premium (Rayfield)
+-- MobsPremium.lua - Mobs Tab Content
 
-local MobsTab = Window:CreateTab("Mobs", 4483362458)
+local Tab = _G.AFSE_Tabs.Mobs
 
-MobsTab:CreateParagraph({
+Tab:CreateParagraph({
    Title = "⚔️ Mob Autofarm",
    Content = "Auto-teleport and attack selected mob types.\nMobs must be spawned to be detected."
 })
 
--- Global variables for mob farming states
 local autoFarmSarkaEnabled = false
 local autoFarmGenEnabled = false
 local autoFarmIgichoEnabled = false
@@ -16,7 +15,6 @@ local autoFarmRemgonukEnabled = false
 local autoFarmSaytamuEnabled = false
 local autoAttackEnabled = false
 
--- Enable auto-attack remote
 local function enableAutoAttack()
    if autoAttackEnabled then return end
    local args = {"Setting", 10}
@@ -26,15 +24,13 @@ local function enableAutoAttack()
    autoAttackEnabled = true
 end
 
--- Check if any mob farm is active (to disable auto-attack when all off)
 local function checkAnyMobFarmActive()
    return autoFarmSarkaEnabled or autoFarmGenEnabled or autoFarmIgichoEnabled 
       or autoFarmBoohEnabled or autoFarmRemgonukEnabled or autoFarmSaytamuEnabled
 end
 
--- Reusable function to create mob autofarm toggles
 local function createMobAutoFarm(mobName, flagName, title)
-   MobsTab:CreateToggle({
+   Tab:CreateToggle({
       Name = title,
       Info = "Auto targets nearest " .. title:lower(),
       CurrentValue = false,
@@ -79,12 +75,11 @@ local function createMobAutoFarm(mobName, flagName, title)
    })
 end
 
--- Create all mob autofarms
 createMobAutoFarm("1", "AutoFarmSarka", "Auto Farm Sarka")
 createMobAutoFarm("2", "AutoFarmGen", "Auto Farm Gen")
 createMobAutoFarm("3", "AutoFarmIgicho", "Auto Farm Igicho")
 createMobAutoFarm("5", "AutoFarmBooh", "Auto Farm Booh")
 createMobAutoFarm("7", "AutoFarmRemgonuk", "Auto Farm Remgonuk")
-createMobAutoFarm("6", "AutoFarmSaytamu", "Auto Farm Saytamu")
+createMobAutoFarm("6", "Auto Farm Saytamu", "Auto Farm Saytamu")
 
-print("Mobs.lua loaded successfully!")
+print("MobsPremium.lua loaded successfully!")

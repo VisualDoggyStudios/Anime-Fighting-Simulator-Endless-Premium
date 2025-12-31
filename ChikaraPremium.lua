@@ -1,15 +1,15 @@
--- Chikara.lua - Standalone Chikara Tab for AFSE Premium (Rayfield)
+-- ChikaraPremium.lua - Chikara Tab Content
 
-local ChikaraTab = Window:CreateTab("Chikara", 4483362458)
+local Tab = _G.AFSE_Tabs.Chikara
 
-ChikaraTab:CreateParagraph({
+Tab:CreateParagraph({
    Title = "💎 Chikara Autofarm",
    Content = "Fully functional with GUI open."
 })
 
 local AutoFarmChikaraEnabled = false
 
-ChikaraTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Auto Farm Chikara Boxes",
    Info = "Teleports and double-clicks nearest crate",
    CurrentValue = false,
@@ -58,4 +58,4 @@ ChikaraTab:CreateToggle({
    end
 })
 
-print("Chikara.lua loaded successfully!")
+print("ChikaraPremium.lua loaded successfully!")

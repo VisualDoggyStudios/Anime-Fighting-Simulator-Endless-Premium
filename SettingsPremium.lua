@@ -1,43 +1,23 @@
--- Settings.lua - Standalone Settings Tab for AFSE Premium (Rayfield)
+-- SettingsPremium.lua - Settings Tab Content
 
-local SettingsTab = Window:CreateTab("Settings", 4483362458)
+local Tab = _G.AFSE_Tabs.Settings
 
-SettingsTab:CreateDropdown({
+Tab:CreateDropdown({
    Name = "UI Theme",
    Info = "Choose your preferred theme",
-   Options = {
-      "Default",
-      "Amber Glow",
-      "Amethyst",
-      "Bloom",
-      "Dark Blue",
-      "Green",
-      "Light",
-      "Ocean",
-      "Serenity"
-   },
+   Options = {"Default", "Amber Glow", "Amethyst", "Bloom", "Dark Blue", "Green", "Light", "Ocean", "Serenity"},
    CurrentOption = {"Default"},
    Flag = "UITheme",
    Callback = function(choice)
       if #choice > 0 then
          local selectedTheme = choice[1]
-         
-         -- Map display name to Rayfield's internal ThemeIdentifier
          local themeMap = {
-            ["Default"]     = "Default",
-            ["Amber Glow"]  = "AmberGlow",
-            ["Amethyst"]    = "Amethyst",
-            ["Bloom"]       = "Bloom",
-            ["Dark Blue"]   = "DarkBlue",
-            ["Green"]       = "Green",
-            ["Light"]       = "Light",
-            ["Ocean"]       = "Ocean",
-            ["Serenity"]    = "Serenity"
+            ["Amber Glow"] = "AmberGlow",
+            ["Dark Blue"] = "DarkBlue"
          }
-         
-         Rayfield:ChangeTheme(themeMap[selectedTheme] or "Default")
+         Rayfield:ChangeTheme(themeMap[selectedTheme] or selectedTheme)
       end
    end
 })
 
-print("Settings.lua loaded successfully with updated themes!")
+print("SettingsPremium.lua loaded successfully!")

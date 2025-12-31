@@ -1,21 +1,19 @@
--- Teleports.lua - Standalone Teleports Tab for AFSE Premium (Rayfield)
+-- TeleportsPremium.lua - Teleports Tab Content
 
-local TeleportsTab = Window:CreateTab("Teleports", 4483362458)
+local Tab = _G.AFSE_Tabs.Teleports
 
-TeleportsTab:CreateParagraph({
+Tab:CreateParagraph({
    Title = "🌍 Premium Teleports",
    Content = "Instant teleport to any training area with dynamic loading."
 })
 
-TeleportsTab:CreateParagraph({
+Tab:CreateParagraph({
    Title = "ℹ️ Tip",
    Content = "Areas load dynamically — explore to unlock more!"
 })
 
--- Training areas folder
 local trainingFolder = game:GetService("Workspace").Scriptable.TrainingAreas
 
--- Name mapping for better display
 local nameMap = {
    ["1"] = "[100 Strength]", ["2"] = "[100 Chakra]", ["3"] = "[100 Durability]", ["4"] = "[100 Speed]", ["5"] = "[100 Agility]",
    ["6"] = "[10K Speed & Agility]", ["8"] = "[10K Strength]", ["9"] = "[100K Strength]", ["10"] = "[1M Strength]",
@@ -56,11 +54,7 @@ local function isPlayerClipped()
    local params = RaycastParams.new()
    params.FilterDescendantsInstances = {character}
    params.FilterType = Enum.RaycastFilterType.Exclude
-   local directions = {
-      Vector3.new(1,0,0), Vector3.new(-1,0,0),
-      Vector3.new(0,0,1), Vector3.new(0,0,-1),
-      Vector3.new(0,1,0), Vector3.new(0,-1,0)
-   }
+   local directions = {Vector3.new(1,0,0), Vector3.new(-1,0,0), Vector3.new(0,0,1), Vector3.new(0,0,-1), Vector3.new(0,1,0), Vector3.new(0,-1,0)}
    for _, dir in ipairs(directions) do
       local result = workspace:Raycast(hrp.Position, dir * 5, params)
       if result then return true end
@@ -68,8 +62,7 @@ local function isPlayerClipped()
    return false
 end
 
--- Create the dropdown
-local teleportDropdown = TeleportsTab:CreateDropdown({
+local teleportDropdown = Tab:CreateDropdown({
    Name = "Select Training Area",
    Info = "Dynamic list — updates automatically",
    Options = getTrainingAreaDisplayNames(),
@@ -80,36 +73,22 @@ local teleportDropdown = TeleportsTab:CreateDropdown({
       local selectedDisplayName = selected[1]
       local targetOriginalName = getOriginalNameFromDisplay(selectedDisplayName)
       if not targetOriginalName then return end
-      
       local character = game.Players.LocalPlayer.Character
       if not character or not character:FindFirstChild("HumanoidRootPart") then return end
       local hrp = character.HumanoidRootPart
-      
       local area = trainingFolder:FindFirstChild(targetOriginalName)
       if not area then return end
-      
       local targetCFrame
       if area:IsA("Model") then
-         if area.PrimaryPart then
-            targetCFrame = area.PrimaryPart.CFrame
-         else
-            local cf, _ = area:GetBoundingBox()
-            targetCFrame = cf
-         end
-      else
-         targetCFrame = area.CFrame
-      end
-      
+         if area.PrimaryPart then targetCFrame = area.PrimaryPart.CFrame
+         else local cf, _ = area:GetBoundingBox() targetCFrame = cf end
+      else targetCFrame = area.CFrame end
       hrp.CFrame = targetCFrame
       wait(0.2)
-      
-      if isPlayerClipped() then
-         hrp.CFrame = targetCFrame + Vector3.new(0, 110, 0)
-      end
+      if isPlayerClipped() then hrp.CFrame = targetCFrame + Vector3.new(0, 110, 0) end
    end
 })
 
--- Auto-refresh the dropdown every 5 seconds
 spawn(function()
    while wait(5) do
       local newValues = getTrainingAreaDisplayNames()
@@ -119,4 +98,4 @@ spawn(function()
    end
 end)
 
-print("Teleports.lua loaded successfully!")
+print("TeleportsPremium.lua loaded successfully!")

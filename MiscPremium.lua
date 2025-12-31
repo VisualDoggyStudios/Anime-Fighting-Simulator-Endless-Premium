@@ -1,13 +1,13 @@
--- Misc.lua - Standalone Misc Tab for AFSE Premium (Rayfield)
+-- MiscPremium.lua - Misc Tab Content
 
-local MiscTab = Window:CreateTab("Misc", 4483362458)
+local Tab = _G.AFSE_Tabs.Misc
 
-MiscTab:CreateParagraph({
+Tab:CreateParagraph({
    Title = "🛠️ Miscellaneous",
    Content = "Extra quality-of-life features."
 })
 
-MiscTab:CreateToggle({
+Tab:CreateToggle({
    Name = "Anti AFK",
    Info = "Prevents getting kicked for inactivity",
    CurrentValue = false,
@@ -19,4 +19,4 @@ MiscTab:CreateToggle({
    end
 })
 
-print("Misc.lua loaded successfully!")
+print("MiscPremium.lua loaded successfully!")

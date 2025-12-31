@@ -1,13 +1,12 @@
--- Codes.lua - Standalone Codes Tab for AFSE Premium (Rayfield)
+-- CodesPremium.lua - Codes Tab Content
 
-local CodesTab = Window:CreateTab("Codes", 4483362458)
+local Tab = _G.AFSE_Tabs.Codes
 
-CodesTab:CreateParagraph({
+Tab:CreateParagraph({
    Title = "🎟️ Code Redeemer",
    Content = "Redeem all available codes with detailed feedback."
 })
 
--- List of codes (you can update this list anytime)
 local codeList = {
    "YenCode", "FreeChikara", "FreeChikara2", "FreeChikara3", "BugFixes1",
    "10Favs", "10Likes", "LASTFIX", "Update1Point1", "SorryForBugsLol",
@@ -15,7 +14,7 @@ local codeList = {
    "400CCU", "10kVisits", "100Favs", "100CCU"
 }
 
-CodesTab:CreateButton({
+Tab:CreateButton({
    Name = "Redeem All Codes",
    Info = "Processes all codes with 0.3s delay • Shows success/fail",
    Callback = function()
@@ -47,4 +46,4 @@ CodesTab:CreateButton({
    end
 })
 
-print("Codes.lua loaded successfully!")
+print("CodesPremium.lua loaded successfully!")
