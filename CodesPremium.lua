@@ -33,31 +33,17 @@ _G.CodeList = {
     -- Add new codes here!
 }
 
--- Function to redeem a single code (used by both auto and manual)
+-- Function to redeem a single code (returns true/false for success)
 _G.RedeemCode = function(code)
     local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("RemoteFunction")
     local success, result = pcall(function()
         return remote:InvokeServer("Code", code)
     end)
 
-    if success and result ~= false then
-        Rayfield:Notify({
-            Title = "Code Success",
-            Content = "Redeemed: " .. code,
-            Duration = 3
-        })
-        return true
-    else
-        Rayfield:Notify({
-            Title = "Code Failed",
-            Content = "Invalid/Already Used: " .. code,
-            Duration = 3
-        })
-        return false
-    end
+    return success and result ~= false
 end
 
--- Main function: Redeem ALL codes
+-- Main function: Redeem ALL codes (notifications handled in main script now)
 _G.RedeemAllCodes = function()
     local successCount = 0
     local failCount = 0
@@ -68,14 +54,10 @@ _G.RedeemAllCodes = function()
         else
             failCount = failCount + 1
         end
-        wait(0.3) -- Safe delay to avoid rate limiting
+        wait(0.3) -- Safe delay
     end
 
-    Rayfield:Notify({
-        Title = "All Codes Processed",
-        Content = "Successful: " .. successCount .. "\nFailed/Used: " .. failCount,
-        Duration = 10
-    })
+    return successCount, failCount
 end
 
 print("CodesPremium.lua loaded - Codes system ready")
