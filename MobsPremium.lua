@@ -1,85 +1,85 @@
--- MobsPremium.lua - Mobs Tab Content
+-- Anime Fighting Simulator Endless - Fast Boss Farming (Wind Grimoire Method)
+local player = game.Players.LocalPlayer
+local RemoteFunction = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RemoteFunction")
 
-local Tab = _G.AFSE_Tabs.Mobs
+local farmStates = {
+    Sarka = false,
+    Gen = false,
+    Igicho = false,
+    Booh = false,
+    Remgonuk = false,
+    Saytamu = false
+}
 
-Tab:CreateParagraph({
-   Title = "⚔️ Mob Autofarm",
-   Content = "Auto-teleport and attack selected mob types.\nMobs must be spawned to be detected."
-})
+local bossConfigs = {
+    Sarka = {
+        pos = Vector3.new(277.47, 60.99, 305.44),
+        look = Vector3.new(-0.017, -0.000, -1.000)
+    },
+    Gen = {
+        pos = Vector3.new(-424.065, 60.999, 723.472),
+        look = Vector3.new(1.000, 0.000, 0.026)
+    },
+    Igicho = {
+        pos = Vector3.new(535.10, 60.99, -1538.90),
+        look = Vector3.new(1.000, 0.000, 0.017)
+    },
+    Booh = {
+        pos = Vector3.new(931.16, 242.99, 919.85),
+        look = Vector3.new(-0.259, -0.000, 0.966)
+    },
+    Remgonuk = {
+        pos = Vector3.new(3077.19, 59.99, -491.97),
+        look = Vector3.new(-0.933, 0.000, -0.122)
+    },
+    Saytamu = {
+        pos = Vector3.new(527.87, 61.00, 1761.96),
+        look = Vector3.new(-1.000, -0.000, 0.000)
+    }
+}
 
-local autoFarmSarkaEnabled = false
-local autoFarmGenEnabled = false
-local autoFarmIgichoEnabled = false
-local autoFarmBoohEnabled = false
-local autoFarmRemgonukEnabled = false
-local autoFarmSaytamuEnabled = false
-local autoAttackEnabled = false
+local function startFarm(bossName)
+    if farmStates[bossName] then return end
+    farmStates[bossName] = true
 
-local function enableAutoAttack()
-   if autoAttackEnabled then return end
-   local args = {"Setting", 10}
-   pcall(function()
-      game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
-   end)
-   autoAttackEnabled = true
-end
+    local config = bossConfigs[bossName]
+    local character = player.Character or player.CharacterAdded:Wait()
+    local hrp = character:WaitForChild("HumanoidRootPart")
 
-local function checkAnyMobFarmActive()
-   return autoFarmSarkaEnabled or autoFarmGenEnabled or autoFarmIgichoEnabled 
-      or autoFarmBoohEnabled or autoFarmRemgonukEnabled or autoFarmSaytamuEnabled
-end
+    -- Teleport with precise rotation
+    local targetCFrame = CFrame.new(config.pos, config.pos + config.look)
+    hrp.CFrame = targetCFrame
 
-local function createMobAutoFarm(mobName, flagName, title)
-   Tab:CreateToggle({
-      Name = title,
-      Info = "Auto targets nearest " .. title:lower(),
-      CurrentValue = false,
-      Flag = flagName,
-      Callback = function(state)
-         _G[flagName] = state
+    -- Summon Wind Grimoire once
+    pcall(function()
+        RemoteFunction:InvokeServer("SummonSpecial", "Grimoires")
+    end)
 
-         if state then
-            enableAutoAttack()
-            spawn(function()
-               while _G[flagName] do
-                  local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-                  local hrp = character:WaitForChild("HumanoidRootPart")
-                  local mobFolder = workspace.Scriptable.Mobs
-                  local closestMob = nil
-                  local closestDist = math.huge
-
-                  for _, mob in ipairs(mobFolder:GetChildren()) do
-                     if mob.Name == mobName and mob:FindFirstChild("HumanoidRootPart") then
-                        local mobRoot = mob:FindFirstChild("HumanoidRootPart")
-                        local dist = (hrp.Position - mobRoot.Position).Magnitude
-                        if dist < closestDist then
-                           closestDist = dist
-                           closestMob = mob
-                        end
-                     end
-                  end
-
-                  if closestMob and closestMob:FindFirstChild("HumanoidRootPart") then
-                     hrp.CFrame = closestMob.HumanoidRootPart.CFrame
-                  end
-
-                  wait(0.1)
-               end
+    -- Spam Z ability
+    task.spawn(function()
+        while farmStates[bossName] do
+            pcall(function()
+                RemoteFunction:InvokeServer("UseSpecialPower", Enum.KeyCode.Z)
             end)
-         else
-            if not checkAnyMobFarmActive() then
-               autoAttackEnabled = false
-            end
-         end
-      end
-   })
+            task.wait(1.55)
+        end
+    end)
 end
 
-createMobAutoFarm("1", "AutoFarmSarka", "Auto Farm Sarka")
-createMobAutoFarm("2", "AutoFarmGen", "Auto Farm Gen")
-createMobAutoFarm("3", "AutoFarmIgicho", "Auto Farm Igicho")
-createMobAutoFarm("5", "AutoFarmBooh", "Auto Farm Booh")
-createMobAutoFarm("7", "AutoFarmRemgonuk", "Auto Farm Remgonuk")
-createMobAutoFarm("6", "Auto Farm Saytamu", "Auto Farm Saytamu")
+local function stopFarm(bossName)
+    farmStates[bossName] = false
+end
 
-print("MobsPremium.lua loaded successfully!")
+-- Global toggles
+_G.ToggleAutoFarmSarka = function(v) if v then startFarm("Sarka") else stopFarm("Sarka") end end
+_G.ToggleAutoFarmGen = function(v) if v then startFarm("Gen") else stopFarm("Gen") end end
+_G.ToggleAutoFarmIgicho = function(v) if v then startFarm("Igicho") else stopFarm("Igicho") end end
+_G.ToggleAutoFarmBooh = function(v) if v then startFarm("Booh") else stopFarm("Booh") end end
+_G.ToggleAutoFarmRemgonuk = function(v) if v then startFarm("Remgonuk") else stopFarm("Remgonuk") end end
+_G.ToggleAutoFarmSaytamu = function(v) if v then startFarm("Saytamu") else stopFarm("Saytamu") end end
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Mobs Module Loaded",
+    Text = "Fast boss farming with Wind Grimoire ready!",
+    Duration = 6
+})
