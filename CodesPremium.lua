@@ -1,10 +1,10 @@
--- CodesPremium.lua - Standalone module for AFSE Hub
--- Auto-redeems all codes when loaded, with full notifications
+-- AFSE Codes Redeemer - Standalone Script
+-- Redeems all codes one by one with safe delay
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("RemoteFunction")
 
--- List of all known codes (update whenever new ones drop!)
-local CodeList = {
+local codes = {
     "YenCode",
     "FreeChikara",
     "FreeChikara2",
@@ -30,62 +30,29 @@ local CodeList = {
     "1MVisits",
     "10kLikes",
     "ChristmasTime"
-    -- Add new codes here!
 }
 
--- Wait a moment for Rayfield to be fully ready (safety)
-task.wait(1)
+print("Starting to redeem " .. #codes .. " codes...")
 
--- Notify that redeeming has started
-Rayfield:Notify({
-    Title = "Codes",
-    Content = "Starting to redeem all codes...",
-    Duration = 5
-})
-
-local successCount = 0
-local failCount = 0
-
-for _, code in ipairs(CodeList) do
-    local remote = ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("RemoteFunction")
+for i, code in ipairs(codes) do
+    print("[" .. i .. "/" .. #codes .. "] Attempting code: " .. code)
     
-    if not remote then
-        Rayfield:Notify({
-            Title = "Error",
-            Content = "Remote not found! Game may have updated.",
-            Duration = 10
-        })
-        break
-    end
-
+    local args = {
+        "Code",
+        code
+    }
+    
     local success, result = pcall(function()
-        return remote:InvokeServer("Code", code)
+        return remote:InvokeServer(unpack(args))
     end)
-
+    
     if success and result ~= false then
-        successCount = successCount + 1
-        Rayfield:Notify({
-            Title = "Success",
-            Content = "Redeemed: " .. code,
-            Duration = 3
-        })
+        print("✅ Success: " .. code)
     else
-        failCount = failCount + 1
-        Rayfield:Notify({
-            Title = "Failed",
-            Content = "Invalid/Used: " .. code,
-            Duration = 3
-        })
+        print("❌ Failed/Already Used: " .. code)
     end
-
-    task.wait(0.3) -- Safe delay to avoid rate limits or detection
+    
+    wait(0.3) -- Safe delay to avoid rate limiting
 end
 
--- Final summary
-Rayfield:Notify({
-    Title = "Codes Finished",
-    Content = "Successful: " .. successCount .. "\nFailed/Used: " .. failCount,
-    Duration = 12
-})
-
-print("CodesPremium.lua - All codes processed!")
+print("All codes processed!")
